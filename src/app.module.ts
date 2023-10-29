@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { HttpModule } from './infra/http/http.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { config } from 'ormconfig';
+// import { config } from 'ormconfig';
 import * as dotenv from 'dotenv';
 import { ScheduleModule } from '@nestjs/schedule';
 import { VersaoMiddleware } from './infra/common/middlewares/versao.middleware';
@@ -14,7 +14,7 @@ dotenv.config({
   imports: [
     HttpModule,
     // DatabaseModule,
-    TypeOrmModule.forRoot({ ...config, autoLoadEntities: true }),
+    // TypeOrmModule.forRoot({ ...config, autoLoadEntities: true }),
     ScheduleModule.forRoot(),
     TenantModule
   ],

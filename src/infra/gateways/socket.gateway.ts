@@ -9,11 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import {
-    AppMessageCreateBody,
-    AppMessageUpdateBody,
-    ChatNotificationsBody,
     ISocketService,
-    WhatsappSessionBody,
 } from 'src/domain/adapters/socket.interface';
 import { ILogger } from 'src/domain/logger/logger.interface';
 
@@ -53,30 +49,6 @@ export class SocketGateway implements ISocketService {
     }
     handleDisconnect(cliet: any): void {
         console.log('SOCKET DISCONNECT', cliet.request.headers.origin);
-    }
-    whatsappSession(body: WhatsappSessionBody): void {
-        this.server.emit('whatsappSession', body);
-    }
-    appMessage(chatId: number | string, body: AppMessageUpdateBody): void {
-        this.server.to(String(chatId)).emit('appMessage', body);
-    }
-
-    appMessageCreate(chatId: number | string, status: string, body: AppMessageCreateBody): void {
-        // console.log('chatId', chatId)
-        // console.log('status', status)
-        this.server
-        .to(String(chatId))
-        .to(String(status))
-        .to("notification")
-        .emit('appMessage', body);
-    }
-
-    chatNotificationStatus(status: string, id: string, body: ChatNotificationsBody): void {
-        this.server.to(status).to("notification").to(id).emit('chat', body);
-    }
-
-    chatsStatus(status: string, body: ChatNotificationsBody): void {
-        this.server.to(status).emit('chats', body);
     }
 
     chatDelete(status: string, body: {action: string, chatId: number}): void {

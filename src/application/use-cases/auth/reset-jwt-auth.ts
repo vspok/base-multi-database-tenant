@@ -12,14 +12,13 @@ export class ResetJWTAuth {
             id,
             canReadMessage,
             master,
-            queues,
             profile,
             sla,
             name,
         } = user;
 
         const token = this.jwtService.createToken(
-            {name, email, id, canReadMessage, master, profile, sla, queues },
+            {name, email, id, canReadMessage, master, profile, sla },
             process.env.JWT_SECRET,
             '30d',
         );

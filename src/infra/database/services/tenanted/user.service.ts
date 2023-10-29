@@ -15,7 +15,7 @@ import { UserEntity } from '../../entities/tenanted/user.entity';
 export class UserService implements UserRepository {
     private readonly userEntityRepository: Repository<UserEntity>
     constructor(
-        @Inject('CONNECTION') connection: IDataSource
+        @Inject('TENANCY_CONNECTION') connection: IDataSource
         ) {
         this.userEntityRepository = connection.getRepository(UserEntity);
 
@@ -65,7 +65,7 @@ export class UserService implements UserRepository {
 
     async findMany(
         where: FilterUser = {},
-    ): Promise<IArrayResponse<{ users: UserEntity[] }>> {
+    ): Promise<IArrayResponse<{ users: UserModel[] }>> {
         const {
             limit = 100,
             pageNumber = 1,

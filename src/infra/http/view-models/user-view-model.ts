@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { QueueViewModel } from './queue-view-model';
+// import { QueueViewModel } from './queue-view-model';
 import { UserModel } from 'src/domain/models/tenanted/user';
 
 export class UserViewModel{
@@ -27,8 +27,8 @@ export class UserViewModel{
     @ApiProperty()
     master: boolean;
 
-    @ApiProperty()
-    queues: QueueViewModel[];
+    // @ApiProperty()
+    // queues: QueueViewModel[];
 
     constructor(user: UserModel){
 
@@ -40,6 +40,6 @@ export class UserViewModel{
         this.canReadMessage = user.canReadMessage;
         this.sla = user.sla
         this.master = user.master
-        this.queues = user.queues ? user.queues.map((queue) => new QueueViewModel(queue)) : [];
+        // this.queues = user.queues ? user.queues.map((queue) => new QueueViewModel(queue)) : [];
     }
 }

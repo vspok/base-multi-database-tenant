@@ -83,6 +83,30 @@ export class TenancyConnection extends ITenancyConnection {
             ...configTenancyDefault,
         });
 
-        await this.tenancy.initialize();
+        await this.tenancy.initialize()
+        .catch(async (error) => {
+            console.log('ERRO MYSQL',error)
+
+            if(error.code.includes('ER_BAD_DB_ERROR')) {
+                let { database, ...configsDatabase } = configTenancyDefault;
+                let db = new IDataSource({
+                    ...configsDatabase,
+                } as MysqlConnectionOptions );
+                console.log('CRIANDO DATABASE')
+
+                await db.initialize();
+                await db.query(`CREATE DATABASE IF NOT EXISTS ${database}`).then(async () => {
+                    console.log(' DATABASE CRIADA')
+                    await db.destroy();
+                    this.createConnectionDefault();
+                }).catch((error) => {
+                    db.destroy();
+
+                    console.log(' DATABASE não Criada', error)
+                })
+                //aqui eu quero criar a database
+
+            }
+        });
     }
 }

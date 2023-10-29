@@ -1,7 +1,9 @@
 // import { ChatModel } from "./chat";
 // import { QueueModel } from "./queue";
 
-export class UserModel{
+import { AbstractModel } from "../abstract";
+
+export class UserModel extends AbstractModel{
     id: number;
     name: string;
     email: string;
@@ -13,6 +15,4 @@ export class UserModel{
     master: boolean;
     // chats: ChatModel[];
     // queues: QueueModel[];
-    createdAt: Date;
-    updatedAt: Date;
 }

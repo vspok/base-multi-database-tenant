@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IBcryptService } from 'src/domain/adapters/bcrypt.interface';
 import { ILogger } from 'src/domain/logger/logger.interface';
-import { QueueModel } from 'src/domain/models/queue';
 import { UserModel } from 'src/domain/models/tenanted/user';
 import { UserRepository } from 'src/domain/repositories/tenanted/user-repository';
 
@@ -14,7 +13,6 @@ interface CreateUserRequest {
     tokenVersion: number;
     canReadMessage: boolean;
     sla: string
-    queues: QueueModel[]
 };
 
 // interface CreateUserResponse {
@@ -39,7 +37,6 @@ export class CreateUser {
         user.tokenVersion = request.tokenVersion;
         user.canReadMessage = request.canReadMessage;
         user.sla = request.sla;
-        user.queues = request.queues;
 
         const result = await this.userRepository.create(user);
 

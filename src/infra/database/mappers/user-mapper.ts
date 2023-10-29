@@ -1,5 +1,5 @@
 import { UserModel } from "src/domain/models/tenanted/user";
-import { UserEntity } from "../entities/user.entity";
+import { UserEntity } from "../entities/tenanted/user.entity";
 
 export class UserMapper{
 
@@ -13,9 +13,9 @@ export class UserMapper{
         userEntity.canReadMessage = user.canReadMessage;
         userEntity.sla = user.sla;
         userEntity.master = user.master;
-        userEntity.queues = user.queues;
+        // userEntity.queues = user.queues;
         userEntity.password = user.password;
-        userEntity.createdAt = user.createdAt;
+        userEntity.created_at = user.created_at;
         return userEntity;
     }
 
@@ -30,9 +30,10 @@ export class UserMapper{
         user.sla = userEntity.sla;
         user.master = userEntity.master;
         user.password = userEntity.password;
-        user.queues = userEntity.queues;
-        user.createdAt = userEntity.createdAt;
-        user.updatedAt = userEntity.updatedAt;
+        // user.queues = userEntity.queues;
+        user.created_at = userEntity.created_at;
+        user.updated_at = userEntity.updated_at;
+        user.deleted_at = userEntity.deleted_at;
 
         return user;
     }

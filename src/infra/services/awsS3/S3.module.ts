@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { IS3Service } from 'src/domain/adapters/s3.interface';
-import { S3Service } from './S3.service';
+// import { IS3Service } from 'src/domain/adapters/s3.interface';
+// import { S3Service } from './S3.service';
 import { S3Client } from '@aws-sdk/client-s3';
 import { LoggerService } from 'src/infra/services/logger/logger.service';
 
 @Module({
-  providers: [{
-    provide: IS3Service,
-    useClass: S3Service,
-  },
+  providers: [
+//     {
+//     provide: IS3Service,
+//     useClass: S3Service,
+//   },
   LoggerService,
   {
     provide: S3Client,
@@ -25,7 +26,7 @@ import { LoggerService } from 'src/infra/services/logger/logger.service';
   },
 ],
   exports: [
-    IS3Service,
+    // IS3Service,
     S3Client
 ]
 })

@@ -1,18 +1,12 @@
-import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class AbstractEntity {
-//   @PrimaryGeneratedColumn('uuid')
-//   id: string;
+    @CreateDateColumn()
+    created_at: Date;
 
-  @CreateDateColumn({
-    type: 'timestamp without time zone',
-    name: 'created_at',
-  })
-  createdAt: Date;
+    @UpdateDateColumn()
+    updated_at: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp without time zone',
-    name: 'updated_at',
-  })
-  updatedAt: Date;
+    @DeleteDateColumn({ default: null })
+    deleted_at: Date;
 }

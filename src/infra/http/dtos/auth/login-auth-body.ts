@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional, Length } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
-import { ContactCustomFieldModel } from "src/domain/models/contact-custom-fields";
+// import { ContactCustomFieldModel } from "src/domain/models/contact-custom-fields";
 
 export class LoginAuthBody{
     @ApiProperty({ required: true })

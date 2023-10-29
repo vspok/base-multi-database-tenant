@@ -4,7 +4,6 @@ export interface IJwtServicePayload {
   canReadMessage: boolean;
   master: boolean;
   profile: string;
-  queues: any;
   sla: string;
   name: string;
 }

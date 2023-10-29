@@ -1,5 +1,7 @@
 export class AbstractModel {
+    created_at: Date;
 
-    createdAt: Date;
-    updatedAt: Date;
+    updated_at: Date;
+
+    deleted_at: Date;
 }
