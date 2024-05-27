@@ -3,6 +3,7 @@ import { DataSourceOptions } from "typeorm";
 import * as dotenv from 'dotenv'
 import { booleanString } from "src/helpers/string-to-boolean";
 import { TENANTED_ENTITIES, TENANTS_ENTITIES } from "src/infra/database/entities/exports.entity";
+import { AutoEncryptSubscriber } from "typeorm-encrypted";
 
 dotenv.config({ path: process.env.NODE_ENV == "production" ? ".env.production" : ".env" })
 
@@ -14,6 +15,7 @@ export const configTenancyDefault:DataSourceOptions = {
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_DATABASE || 'generic_table',
     entities: TENANTS_ENTITIES,
+    subscribers: [AutoEncryptSubscriber],
     synchronize: booleanString(process.env.BD_SINCROZAR),
     logging: booleanString(process.env.BD_LOGGING),
     timezone: 'Z',

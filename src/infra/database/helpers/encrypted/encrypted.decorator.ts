@@ -1,39 +1,57 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import crypto from 'crypto';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
-export function EncryptedField() {
-  return function (target: Object, propertyKey: string) {
-    const ivLength = 16; // Tamanho do vetor de inicialização
+const algorithm = 'aes-256-cbc';
+const password = 'sua-senha-ou-chave-mestra';
+const iv = randomBytes(16);
+const key = 'd85117047fd06d3afa79b6e44ee3a52eb426fc24c3a2e3667732e8da0342b4da';
+console.log(key)
+// const key = 'sua-chave-secreta'; // Substitua pela sua chave secreta
 
-    // Getter para descriptografar o campo ao carregá-lo da base de dados
-    function get() {
-      const encryptedValue = this[propertyKey];
-      if (encryptedValue) {
-        const secret = 'chave_secreta'; // Substitua pela chave segura
-        const iv = Buffer.from(encryptedValue.slice(0, ivLength), 'hex');
-        const encryptedText = encryptedValue.slice(ivLength);
+const ENCRYPTED_PREFIX:string = 'ENCRYPTED::';
+const ENCRYPTED_PREFIX_LENGTH = ENCRYPTED_PREFIX.length;
 
-        const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(secret), iv);
-        const decrypted = decipher.update(encryptedText, 'hex', 'utf8') + decipher.final('utf8');
-        return decrypted;
-      }
-      return null;
-    }
+const encrypt = (text) => {
+    console.log('text', text)
+  const cipher = createCipheriv(algorithm, Buffer.from(key), iv);
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return ENCRYPTED_PREFIX + encrypted;
+};
 
-    // Setter para criptografar o campo antes de inserir ou atualizar
-    function set(newValue: string) {
-      const secret = 'chave_secreta'; // Substitua pela chave segura
-      const iv = crypto.randomBytes(ivLength);
-      const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(secret), iv);
-      const encryptedValue = iv.toString('hex') + cipher.update(newValue, 'utf8', 'hex') + cipher.final('hex');
-      this[propertyKey] = encryptedValue;
-    }
+const decrypt = (text) => {
+  if (text.startsWith(ENCRYPTED_PREFIX)) {
+    text = text.slice(ENCRYPTED_PREFIX_LENGTH); // Remove o prefixo
+    const decipher = createDecipheriv(algorithm, Buffer.from(key), iv);
+    let decrypted = decipher.update(text, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+  } else {
+    // Se não começar com o prefixo, o valor não está criptografado
+    return text;
+  }
+};
 
-    Object.defineProperty(target, propertyKey, {
-      get: get,
-      set: set,
-      enumerable: true,
-      configurable: true,
+export function EncryptedColumn() {
+  return function (target, propertyName) {
+    const original = Reflect.getMetadata('design:type', target, propertyName);
+
+    BeforeInsert()(target, propertyName);
+    BeforeUpdate()(target, propertyName);
+
+    Object.defineProperty(target, propertyName, {
+      get: function () {
+        const encryptedValue = this[`${propertyName}`];
+        if (encryptedValue) {
+          return decrypt(encryptedValue);
+        }
+        return encryptedValue;
+      },
+      set: function (value) {
+        this[`${propertyName}`] = encrypt(value);
+      },
     });
+
+    Column({ type: 'text' })(target, `${propertyName}`);
   };
 }

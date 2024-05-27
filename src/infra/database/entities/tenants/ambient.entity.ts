@@ -4,7 +4,9 @@ import {  TenantEntity } from './tenant.entity';
 
 @Entity({ name: 'ambient' })
 export class AmbientEntity extends AbstractEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn({
+        type: 'bigint',
+    })
     id: string;
 
     @Column()
